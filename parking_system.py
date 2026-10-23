@@ -15,7 +15,11 @@ def register_permit(vehicle_plate, zone_id, zone_records=None):
     try:
         permit_no = "P" + str(10000 + secrets.randbelow(90000))
         expiry = datetime.now() + timedelta(days=180)
-        permits[vehicle_plate] = {"zone": zone_id, "permit": permit_no, "expiry": expiry.strftime("%Y-%m-%d")}
+        permits[vehicle_plate] = {
+            "zone": zone_id,
+            "permit": permit_no,
+            "expiry": expiry.strftime("%Y-%m-%d"),
+        }
         zone_records.append((vehicle_plate, zone_id))
         return permit_no
     except (TypeError, ValueError):
@@ -30,7 +34,9 @@ def revoke_permit(vehicle_plate):
 def is_expired(vehicle_plate):
     """Return True if the vehicle's permit has expired."""
     try:
-        expiry = datetime.strptime(permits[vehicle_plate]["expiry"], "%Y-%m-%d")
+        expiry = datetime.strptime(
+            permits[vehicle_plate]["expiry"], "%Y-%m-%d"
+        )
         return expiry < datetime.now()
     except (KeyError, ValueError):
         return False
@@ -76,11 +82,13 @@ def main():
     register_permit(None, "C")
     set_expiry("KA01AB1234", "01/01/2020")
     revoke_permit("MH12ZZ0000")
-    print("Flagged in zone A:", scan_zone("A", ["KA01AB1234", "KA05XY9999", "TN09QQ1111"]))
+    flagged = scan_zone("A", ["KA01AB1234", "KA05XY9999", "TN09QQ1111"])
+    print("Flagged in zone A:", flagged)
     plate = input("Plate to revoke (Enter to skip): ")
     revoke_permit(plate)
     save_permit_database()
     print("Permits on file:", len(permits))
 
 
-main()
+if __name__ == "__main__":
+    main()
