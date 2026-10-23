@@ -1,0 +1,6 @@
+﻿************* Module parking_system
+parking_system.py:18:0: C0301: Line too long (110/100) (line-too-long)
+
+------------------------------------------------------------------
+Your code has been rated at 9.82/10 (previous run: 6.32/10, +3.51)
+
